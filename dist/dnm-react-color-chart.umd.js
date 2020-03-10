@@ -265,9 +265,15 @@
             layout = _this$props2.layout,
             colors = _this$props2.colors;
         var rgba_colors = [];
+        var new_static_colors = {};
 
         for (var key in colors) {
-          rgba_colors.push(this.getRgbaValue(colors[key]));
+          var color_in_layout = layout[key];
+
+          if (color_in_layout) {
+            var rgba = this.getRgbaValue(colors[key]);
+            if (!color_in_layout["static"]) rgba_colors.push(rgba);else new_static_colors[key] = rgba;
+          }
         }
 
         for (var _key in layout) {
@@ -281,7 +287,9 @@
         }
 
         for (var _key2 in layout) {
-          if (layout[_key2]["static"]) rgba_colors.push(this.getRgbaValue(layout[_key2]["static"]));
+          if (layout[_key2]["static"]) {
+            if (!new_static_colors[_key2]) rgba_colors.push(this.getRgbaValue(layout[_key2]["static"]));else rgba_colors.push(new_static_colors[_key2]);
+          }
         }
 
         return React.createElement("div", {

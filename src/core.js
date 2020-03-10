@@ -125,8 +125,14 @@ class DnmColorChart extends React.Component {
       classes, layout, colors,
     } = this.props;
     const rgba_colors = [];
+    const new_static_colors = {};
     for (const key in colors) {
-      rgba_colors.push(this.getRgbaValue(colors[key]));
+      const color_in_layout = layout[key];
+      if(color_in_layout) {
+        const rgba = this.getRgbaValue(colors[key]);
+        if(!color_in_layout.static) rgba_colors.push(rgba);
+        else new_static_colors[key] = rgba;
+      }
     }
     for (const key in layout) {
       const { offset_hsl, offset_from } = layout[key];
@@ -135,7 +141,10 @@ class DnmColorChart extends React.Component {
       }
     }
     for (const key in layout) {
-      if (layout[key].static) rgba_colors.push(this.getRgbaValue(layout[key].static));
+      if (layout[key].static) {
+        if(!new_static_colors[key]) rgba_colors.push(this.getRgbaValue(layout[key].static));
+        else rgba_colors.push(new_static_colors[key]);
+      }
     }
     return (
       <div className={classes && classes.root ? classes.root : ''}>
