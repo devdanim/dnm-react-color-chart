@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 
 class DnmColorChartItem extends React.PureComponent {
   render() {
-    const { rgba, className } = this.props;
+    const { rgba, className, onClick } = this.props;
+
     return (
-      <div className={className || ''} style={{ backgroundColor: `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} />
+      <div className={className || ''} style={{ backgroundColor: `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick} />
     );
   }
 }
@@ -120,9 +121,14 @@ class DnmColorChart extends React.Component {
     return [rgb[0], rgb[1], rgb[2], rgba[3]];
   }
 
+  handleColorClick = (event, rgba) => {
+    const { onColorClick } = this.props;
+    if (onColorClick) onColorClick(event, rgba);
+  }
+
   render() {
     const {
-      classes, layout, colors,
+      classes, layout, colors, children,
     } = this.props;
     const rgba_colors = [];
     const new_static_colors = {};
@@ -130,27 +136,28 @@ class DnmColorChart extends React.Component {
       const color_in_layout = layout[key];
       if(color_in_layout) {
         const rgba = this.getRgbaValue(colors[key]);
-        if(!color_in_layout.static) rgba_colors.push(rgba);
+        if(!color_in_layout.static) rgba_colors.push({ id: key, value: rgba });
         else new_static_colors[key] = rgba;
       }
     }
     for (const key in layout) {
       const { offset_hsl, offset_from } = layout[key];
       if (offset_hsl && offset_from && colors[offset_from]) {
-        rgba_colors.push(this.getRgbaValue(colors[offset_from], offset_hsl));
+        rgba_colors.push({ id: key, value: this.getRgbaValue(colors[offset_from], offset_hsl) });
       }
     }
     for (const key in layout) {
       if (layout[key].static) {
-        if(!new_static_colors[key]) rgba_colors.push(this.getRgbaValue(layout[key].static));
-        else rgba_colors.push(new_static_colors[key]);
+        if(!new_static_colors[key]) rgba_colors.push({ id: key, value: this.getRgbaValue(layout[key].static) });
+        else rgba_colors.push({ id: key, value: new_static_colors[key] });
       }
     }
     return (
       <div className={classes && classes.root ? classes.root : ''}>
         { rgba_colors.map((rgba, index) => (
-          <DnmColorChartItem key={index} className={classes && classes.item ? classes.item : ''} rgba={rgba} />
+          <DnmColorChartItem key={index} className={classes && classes.item ? classes.item : ''} rgba={rgba.value} onClick={event => this.handleColorClick(event, rgba)} />
         )) }
+        { children }
       </div>
     );
   }
@@ -171,7 +178,8 @@ DnmColorChart.propTypes = {
         }),
         static: PropTypes.string
     })).isRequired, 
-    colors: PropTypes.objectOf(PropTypes.string).isRequired
+    colors: PropTypes.objectOf(PropTypes.string).isRequired,
+    onColorClick: PropTypes.func,
 };
 
 export default DnmColorChart;

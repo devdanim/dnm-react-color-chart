@@ -1,6 +1,6 @@
 {
   "name": "dnm-react-color-chart",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "dist/dnm-react-color-chart.umd.min.js",
   "module": "dist/dnm-react-color-chart.es.min.js",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.18.5",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",

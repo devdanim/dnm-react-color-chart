@@ -39,6 +39,10 @@ const variants = [
     }
 ]
 
+const handleColorClick = (event, { id, value }) => {
+    console.log(event, { id, value });
+}
+
 render(
     <React.Fragment>
         {
@@ -51,7 +55,10 @@ render(
                     }}
                     layout={layout}
                     colors={colors}
-                />
+                    onColorClick={handleColorClick}
+                >
+                    <span>Theme {i + 1}</span>
+                </DnmColorChart>
             ))
         }
     </React.Fragment>,

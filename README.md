@@ -34,6 +34,10 @@ const colors = {
     "secondary-color": "#3d78ab"
 }
 
+const handleColorClick = (event, { id, value }) => {
+    console.log(event, { id, value });
+}
+
 render(
     <DnmColorChart
         classes={{
@@ -42,6 +46,7 @@ render(
         }}
         layout={layout}
         colors={colors}
+        onColorClick={handleColorClick}
     />,
     document.getElementById('root')
 );

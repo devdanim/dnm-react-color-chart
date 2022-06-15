@@ -26,6 +26,9 @@
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
 
@@ -56,22 +59,24 @@
         configurable: true
       }
     });
+    Object.defineProperty(subClass, "prototype", {
+      writable: false
+    });
     if (superClass) _setPrototypeOf(subClass, superClass);
   }
 
   function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
     return _getPrototypeOf(o);
   }
 
   function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
-
     return _setPrototypeOf(o, p);
   }
 
@@ -86,6 +91,8 @@
   function _possibleConstructorReturn(self, call) {
     if (call && (typeof call === "object" || typeof call === "function")) {
       return call;
+    } else if (call !== void 0) {
+      throw new TypeError("Derived constructors may only return object or undefined");
     }
 
     return _assertThisInitialized(self);
@@ -105,12 +112,14 @@
       value: function render() {
         var _this$props = this.props,
             rgba = _this$props.rgba,
-            className = _this$props.className;
+            className = _this$props.className,
+            onClick = _this$props.onClick;
         return React.createElement("div", {
           className: className || '',
           style: {
             backgroundColor: "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")")
-          }
+          },
+          onClick: onClick
         });
       }
     }]);
@@ -154,14 +163,14 @@
           h = 0;
         } // Red is max
         else if (cmax == r) {
-            h = (g - b) / delta % 6;
-          } // Green is max
-          else if (cmax == g) {
-              h = (b - r) / delta + 2;
-            } // Blue is max
-            else {
-                h = (r - g) / delta + 4;
-              }
+          h = (g - b) / delta % 6;
+        } // Green is max
+        else if (cmax == g) {
+          h = (b - r) / delta + 2;
+        } // Blue is max
+        else {
+          h = (r - g) / delta + 4;
+        }
 
         h = Math.round(h * 60); // Make negative hues positive behind 360°
 
@@ -253,6 +262,11 @@
         return [rgb[0], rgb[1], rgb[2], rgba[3]];
       });
 
+      _defineProperty(_assertThisInitialized(_this), "handleColorClick", function (event, rgba) {
+        var onColorClick = _this.props.onColorClick;
+        if (onColorClick) onColorClick(event, rgba);
+      });
+
       return _this;
     } // https://stackoverflow.com/users/3853934/micha%c5%82-per%c5%82akowski
 
@@ -260,10 +274,13 @@
     _createClass(DnmColorChart, [{
       key: "render",
       value: function render() {
+        var _this2 = this;
+
         var _this$props2 = this.props,
             classes = _this$props2.classes,
             layout = _this$props2.layout,
-            colors = _this$props2.colors;
+            colors = _this$props2.colors,
+            children = _this$props2.children;
         var rgba_colors = [];
         var new_static_colors = {};
 
@@ -272,7 +289,10 @@
 
           if (color_in_layout) {
             var rgba = this.getRgbaValue(colors[key]);
-            if (!color_in_layout["static"]) rgba_colors.push(rgba);else new_static_colors[key] = rgba;
+            if (!color_in_layout["static"]) rgba_colors.push({
+              id: key,
+              value: rgba
+            });else new_static_colors[key] = rgba;
           }
         }
 
@@ -282,13 +302,22 @@
               offset_from = _layout$_key.offset_from;
 
           if (offset_hsl && offset_from && colors[offset_from]) {
-            rgba_colors.push(this.getRgbaValue(colors[offset_from], offset_hsl));
+            rgba_colors.push({
+              id: _key,
+              value: this.getRgbaValue(colors[offset_from], offset_hsl)
+            });
           }
         }
 
         for (var _key2 in layout) {
           if (layout[_key2]["static"]) {
-            if (!new_static_colors[_key2]) rgba_colors.push(this.getRgbaValue(layout[_key2]["static"]));else rgba_colors.push(new_static_colors[_key2]);
+            if (!new_static_colors[_key2]) rgba_colors.push({
+              id: _key2,
+              value: this.getRgbaValue(layout[_key2]["static"])
+            });else rgba_colors.push({
+              id: _key2,
+              value: new_static_colors[_key2]
+            });
           }
         }
 
@@ -298,9 +327,12 @@
           return React.createElement(DnmColorChartItem, {
             key: index,
             className: classes && classes.item ? classes.item : '',
-            rgba: rgba
+            rgba: rgba.value,
+            onClick: function onClick(event) {
+              return _this2.handleColorClick(event, rgba);
+            }
           });
-        }));
+        }), children);
       }
     }]);
 
@@ -322,7 +354,8 @@
       }),
       "static": PropTypes.string
     })).isRequired,
-    colors: PropTypes.objectOf(PropTypes.string).isRequired
+    colors: PropTypes.objectOf(PropTypes.string).isRequired,
+    onColorClick: PropTypes.func
   };
 
   return DnmColorChart;
