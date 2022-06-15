@@ -1,6 +1,6 @@
 {
   "name": "dnm-react-color-chart",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/dnm-react-color-chart.umd.min.js",
   "module": "dist/dnm-react-color-chart.es.min.js",
@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/devdanim/dnm-react-color-chart#readme",
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
