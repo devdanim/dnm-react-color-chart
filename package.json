@@ -1,6 +1,6 @@
 {
   "name": "dnm-react-color-chart",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "dist/dnm-react-color-chart.umd.min.js",
   "module": "dist/dnm-react-color-chart.es.min.js",
@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/devdanim/dnm-react-color-chart#readme",
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -46,13 +46,16 @@
     "npm-login-noninteractive": "^0.1.4",
     "onchange": "^5.2.0",
     "parcel-bundler": "^1.12.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rollup": "^1.0.0",
     "rollup-plugin-babel": "^4.2.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-terser": "^4.0.4"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1"
   }
 }

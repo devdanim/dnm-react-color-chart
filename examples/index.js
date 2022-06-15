@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import DnmColorChart from '../dist/dnm-react-color-chart.es';
 
 const layout = {
@@ -43,7 +43,8 @@ const handleColorClick = (event, { id, value }) => {
     console.log(event, { id, value });
 }
 
-render(
+const root = createRoot(document.getElementById('root'));
+root.render(
     <React.Fragment>
         {
             variants.map((colors, i) => (
@@ -61,6 +62,5 @@ render(
                 </DnmColorChart>
             ))
         }
-    </React.Fragment>,
-    document.getElementById('root')
+    </React.Fragment>  
 );

@@ -38,7 +38,8 @@ const handleColorClick = (event, { id, value }) => {
     console.log(event, { id, value });
 }
 
-render(
+const root = createRoot(document.getElementById('root'));
+root.render(
     <DnmColorChart
         classes={{
             item: "color-chart-item",
@@ -47,8 +48,7 @@ render(
         layout={layout}
         colors={colors}
         onColorClick={handleColorClick}
-    />,
-    document.getElementById('root')
+    />
 );
 
 ```
