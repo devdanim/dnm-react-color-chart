@@ -34,8 +34,8 @@ const variants = [
         "secondary-color": "#d01a1a"
     },
     {
-        "main": "#4d49dc",
-        "secondary-color": "#3d78ab"
+        "main": "{{ mainColor }}",
+        "secondary-color": "{{ secondaryColor }}"
     }
 ]
 

@@ -114,13 +114,14 @@
             rgba = _this$props.rgba,
             className = _this$props.className,
             onClick = _this$props.onClick;
+        var value = typeof rgba === 'string' ? rgba.replace(/\s/g, "").charAt(2).toUpperCase() : null;
         return React.createElement("div", {
           className: className || '',
           style: {
             backgroundColor: "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")")
           },
           onClick: onClick
-        });
+        }, value);
       }
     }]);
 
@@ -288,11 +289,17 @@
           var color_in_layout = layout[key];
 
           if (color_in_layout) {
-            var rgba = this.getRgbaValue(colors[key]);
-            if (!color_in_layout["static"]) rgba_colors.push({
+            // if colors[key] match the pattern {{ color_name }}, should return a white color
+            if (colors[key].match(/{{\s*[\w\.]+\s*}}/)) rgba_colors.push({
               id: key,
-              value: rgba
-            });else new_static_colors[key] = rgba;
+              value: colors[key]
+            });else {
+              var rgba = this.getRgbaValue(colors[key]);
+              if (!color_in_layout["static"]) rgba_colors.push({
+                id: key,
+                value: rgba
+              });else new_static_colors[key] = rgba;
+            }
           }
         }
 
@@ -302,7 +309,10 @@
               offset_from = _layout$_key.offset_from;
 
           if (offset_hsl && offset_from && colors[offset_from]) {
-            rgba_colors.push({
+            if (colors[offset_from].match(/{{\s*[\w\.]+\s*}}/)) rgba_colors.push({
+              id: _key,
+              value: colors[offset_from]
+            });else rgba_colors.push({
               id: _key,
               value: this.getRgbaValue(colors[offset_from], offset_hsl)
             });

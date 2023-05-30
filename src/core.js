@@ -6,8 +6,12 @@ class DnmColorChartItem extends React.PureComponent {
   render() {
     const { rgba, className, onClick } = this.props;
 
+    const value = typeof rgba === 'string' ? rgba.replace(/\s/g, "").charAt(2).toUpperCase() : null;
+
     return (
-      <div className={className || ''} style={{ backgroundColor: `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick} />
+      <div className={className || ''} style={{ backgroundColor: `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick}>
+        {value}
+      </div>
     );
   }
 }
@@ -73,7 +77,7 @@ class DnmColorChart extends React.Component {
     else if (s < 0) s = 0;
     l /= 100;
     if (l > 1) l = 1;
-    else if (l < 0)l = 0;
+    else if (l < 0) l = 0;
     while (h < 0) h += 360;
     h %= 360;
 
@@ -134,52 +138,62 @@ class DnmColorChart extends React.Component {
     const new_static_colors = {};
     for (const key in colors) {
       const color_in_layout = layout[key];
-      if(color_in_layout) {
-        const rgba = this.getRgbaValue(colors[key]);
-        if(!color_in_layout.static) rgba_colors.push({ id: key, value: rgba });
-        else new_static_colors[key] = rgba;
+      if (color_in_layout) {
+        // if colors[key] match the pattern {{ color_name }}, should return a white color
+        if (colors[key].match(/{{\s*[\w\.]+\s*}}/))
+          rgba_colors.push({ id: key, value: colors[key] });
+        else {
+          const rgba = this.getRgbaValue(colors[key]);
+          if (!color_in_layout.static) rgba_colors.push({ id: key, value: rgba });
+          else new_static_colors[key] = rgba;
+        }
       }
     }
     for (const key in layout) {
       const { offset_hsl, offset_from } = layout[key];
       if (offset_hsl && offset_from && colors[offset_from]) {
-        rgba_colors.push({ id: key, value: this.getRgbaValue(colors[offset_from], offset_hsl) });
+        if (colors[offset_from].match(/{{\s*[\w\.]+\s*}}/))
+          rgba_colors.push({ id: key, value: colors[offset_from] });
+        else
+          rgba_colors.push({ id: key, value: this.getRgbaValue(colors[offset_from], offset_hsl) });
       }
     }
     for (const key in layout) {
       if (layout[key].static) {
-        if(!new_static_colors[key]) rgba_colors.push({ id: key, value: this.getRgbaValue(layout[key].static) });
+        if (!new_static_colors[key]) rgba_colors.push({ id: key, value: this.getRgbaValue(layout[key].static) });
         else rgba_colors.push({ id: key, value: new_static_colors[key] });
       }
     }
     return (
       <div className={classes && classes.root ? classes.root : ''}>
-        { rgba_colors.map((rgba, index) => (
-          <DnmColorChartItem key={index} className={classes && classes.item ? classes.item : ''} rgba={rgba.value} onClick={event => this.handleColorClick(event, rgba)} />
-        )) }
-        { children }
-      </div>
+        {
+          rgba_colors.map((rgba, index) => (
+            <DnmColorChartItem key={index} className={classes && classes.item ? classes.item : ''} rgba={rgba.value} onClick={event => this.handleColorClick(event, rgba)} />
+          ))
+        }
+        {children}
+      </div >
     );
   }
 }
 
 DnmColorChart.propTypes = {
-    classes: PropTypes.shape({
-        item: PropTypes.string,
-        root: PropTypes.string
-    }), 
-    layout: PropTypes.objectOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        offset_from: PropTypes.string,
-        offset_hsl: PropTypes.shape({
-            h: PropTypes.number,
-            s: PropTypes.number,
-            l: PropTypes.number
-        }),
-        static: PropTypes.string
-    })).isRequired, 
-    colors: PropTypes.objectOf(PropTypes.string).isRequired,
-    onColorClick: PropTypes.func,
+  classes: PropTypes.shape({
+    item: PropTypes.string,
+    root: PropTypes.string
+  }),
+  layout: PropTypes.objectOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    offset_from: PropTypes.string,
+    offset_hsl: PropTypes.shape({
+      h: PropTypes.number,
+      s: PropTypes.number,
+      l: PropTypes.number
+    }),
+    static: PropTypes.string
+  })).isRequired,
+  colors: PropTypes.objectOf(PropTypes.string).isRequired,
+  onColorClick: PropTypes.func,
 };
 
 export default DnmColorChart;
