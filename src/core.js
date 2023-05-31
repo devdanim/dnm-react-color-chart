@@ -6,7 +6,7 @@ class DnmColorChartItem extends React.PureComponent {
   render() {
     const { rgba, className, onClick } = this.props;
 
-    const value = typeof rgba === 'string' ? rgba.replace(/\s/g, "").charAt(2).toUpperCase() : null;
+    const value = typeof rgba === 'string' ? rgba : null;
 
     return (
       <div className={className || ''} style={{ backgroundColor: `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick}>
@@ -139,9 +139,19 @@ class DnmColorChart extends React.Component {
     for (const key in colors) {
       const color_in_layout = layout[key];
       if (color_in_layout) {
-        // if colors[key] match the pattern {{ color_name }}, should return a white color
+        // if colors[key] match the pattern {{ color_name }}, should return the color value of color_name
         if (colors[key].match(/{{\s*[\w\.]+\s*}}/))
-          rgba_colors.push({ id: key, value: colors[key] });
+          switch (colors[key]) {
+            case '{{ mainColor }}':
+              rgba_colors.push({ id: key, value: 'P' });
+              break;
+            case '{{ secondaryColor }}':
+              rgba_colors.push({ id: key, value: 'S' });
+              break;
+            case '{{ extraColor }}':
+              rgba_colors.push({ id: key, value: 'A' });
+              break;
+          }
         else {
           const rgba = this.getRgbaValue(colors[key]);
           if (!color_in_layout.static) rgba_colors.push({ id: key, value: rgba });
@@ -153,7 +163,17 @@ class DnmColorChart extends React.Component {
       const { offset_hsl, offset_from } = layout[key];
       if (offset_hsl && offset_from && colors[offset_from]) {
         if (colors[offset_from].match(/{{\s*[\w\.]+\s*}}/))
-          rgba_colors.push({ id: key, value: colors[offset_from] });
+          switch (colors[offset_from]) {
+            case '{{ mainColor }}':
+              rgba_colors.push({ id: key, value: '_P' });
+              break;
+            case '{{ secondaryColor }}':
+              rgba_colors.push({ id: key, value: '_S' });
+              break;
+            case '{{ extraColor }}':
+              rgba_colors.push({ id: key, value: '_A' });
+              break;
+          }
         else
           rgba_colors.push({ id: key, value: this.getRgbaValue(colors[offset_from], offset_hsl) });
       }

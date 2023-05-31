@@ -18,24 +18,26 @@ const layout = {
     "secondary-color": {
         "name": "Secondary Color"
     },
-    "background-color": {
-        "name": "Background Color",
-        "static": "#648fb5"
+    "extra-color": {
+        "name": "Extra Color",
     }
 };
 
 const variants = [
     {
         "main": "#49dc5b",
-        "secondary-color": "#3d78ab"
+        "secondary-color": "#3d78ab",
+        "extra-color": "#d01a1a"
     },
     {
         "main": "#4d49dc",
-        "secondary-color": "#d01a1a"
+        "secondary-color": "#d01a1a",
+        "extra-color": "#3d78ab"
     },
     {
         "main": "{{ mainColor }}",
-        "secondary-color": "{{ secondaryColor }}"
+        "secondary-color": "{{ secondaryColor }}",
+        "extra-color": "{{ extraColor }}"
     }
 ]
 

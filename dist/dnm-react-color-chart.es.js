@@ -108,7 +108,7 @@ var DnmColorChartItem = /*#__PURE__*/function (_React$PureComponent) {
           rgba = _this$props.rgba,
           className = _this$props.className,
           onClick = _this$props.onClick;
-      var value = typeof rgba === 'string' ? rgba.replace(/\s/g, "").charAt(2).toUpperCase() : null;
+      var value = typeof rgba === 'string' ? rgba : null;
       return React.createElement("div", {
         className: className || '',
         style: {
@@ -283,11 +283,29 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
         var color_in_layout = layout[key];
 
         if (color_in_layout) {
-          // if colors[key] match the pattern {{ color_name }}, should return a white color
-          if (colors[key].match(/{{\s*[\w\.]+\s*}}/)) rgba_colors.push({
-            id: key,
-            value: colors[key]
-          });else {
+          // if colors[key] match the pattern {{ color_name }}, should return the color value of color_name
+          if (colors[key].match(/{{\s*[\w\.]+\s*}}/)) switch (colors[key]) {
+            case '{{ mainColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'P'
+              });
+              break;
+
+            case '{{ secondaryColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'S'
+              });
+              break;
+
+            case '{{ extraColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'A'
+              });
+              break;
+          } else {
             var rgba = this.getRgbaValue(colors[key]);
             if (!color_in_layout["static"]) rgba_colors.push({
               id: key,
@@ -303,10 +321,28 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
             offset_from = _layout$_key.offset_from;
 
         if (offset_hsl && offset_from && colors[offset_from]) {
-          if (colors[offset_from].match(/{{\s*[\w\.]+\s*}}/)) rgba_colors.push({
-            id: _key,
-            value: colors[offset_from]
-          });else rgba_colors.push({
+          if (colors[offset_from].match(/{{\s*[\w\.]+\s*}}/)) switch (colors[offset_from]) {
+            case '{{ mainColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_P'
+              });
+              break;
+
+            case '{{ secondaryColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_S'
+              });
+              break;
+
+            case '{{ extraColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_A'
+              });
+              break;
+          } else rgba_colors.push({
             id: _key,
             value: this.getRgbaValue(colors[offset_from], offset_hsl)
           });
