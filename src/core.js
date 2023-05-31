@@ -9,7 +9,7 @@ class DnmColorChartItem extends React.PureComponent {
     const value = typeof rgba === 'string' ? rgba : null;
 
     return (
-      <div className={className || ''} style={{ backgroundColor: `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick}>
+      <div className={className || ''} style={{ backgroundColor: value ? 'unset' : `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick}>
         {value}
       </div>
     );

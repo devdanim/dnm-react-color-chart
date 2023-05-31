@@ -112,7 +112,7 @@ var DnmColorChartItem = /*#__PURE__*/function (_React$PureComponent) {
       return React.createElement("div", {
         className: className || '',
         style: {
-          backgroundColor: "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")")
+          backgroundColor: value ? 'unset' : "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")")
         },
         onClick: onClick
       }, value);
