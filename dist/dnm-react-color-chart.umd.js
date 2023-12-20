@@ -4,7 +4,7 @@
   (global = global || self, global.DnmColorChart = factory(global.React, global.PropTypes));
 }(this, (function (React, PropTypes) { 'use strict';
 
-  React = React && Object.prototype.hasOwnProperty.call(React, 'default') ? React['default'] : React;
+  var React__default = 'default' in React ? React['default'] : React;
   PropTypes = PropTypes && Object.prototype.hasOwnProperty.call(PropTypes, 'default') ? PropTypes['default'] : PropTypes;
 
   function _classCallCheck(instance, Constructor) {
@@ -98,35 +98,20 @@
     return _assertThisInitialized(self);
   }
 
-  var DnmColorChartItem = /*#__PURE__*/function (_React$PureComponent) {
-    _inherits(DnmColorChartItem, _React$PureComponent);
-
-    function DnmColorChartItem() {
-      _classCallCheck(this, DnmColorChartItem);
-
-      return _possibleConstructorReturn(this, _getPrototypeOf(DnmColorChartItem).apply(this, arguments));
-    }
-
-    _createClass(DnmColorChartItem, [{
-      key: "render",
-      value: function render() {
-        var _this$props = this.props,
-            rgba = _this$props.rgba,
-            className = _this$props.className,
-            onClick = _this$props.onClick;
-        var value = typeof rgba === 'string' ? rgba : null;
-        return React.createElement("div", {
-          className: className || '',
-          style: {
-            backgroundColor: value ? 'unset' : "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")")
-          },
-          onClick: onClick
-        }, value);
-      }
-    }]);
-
-    return DnmColorChartItem;
-  }(React.PureComponent);
+  var DnmColorChartItem = React.memo(function DnmColorChartItem(_ref) {
+    var rgba = _ref.rgba,
+        className = _ref.className,
+        onClick = _ref.onClick;
+    var value = typeof rgba === 'string' ? rgba : null;
+    return React__default.createElement("div", {
+      className: className || '',
+      style: {
+        backgroundColor: value ? 'unset' : "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")"),
+        position: 'relative'
+      },
+      onClick: onClick
+    }, value);
+  });
 
   var DnmColorChart = /*#__PURE__*/function (_React$Component) {
     _inherits(DnmColorChart, _React$Component);
@@ -277,11 +262,11 @@
       value: function render() {
         var _this2 = this;
 
-        var _this$props2 = this.props,
-            classes = _this$props2.classes,
-            layout = _this$props2.layout,
-            colors = _this$props2.colors,
-            children = _this$props2.children;
+        var _this$props = this.props,
+            classes = _this$props.classes,
+            layout = _this$props.layout,
+            colors = _this$props.colors,
+            children = _this$props.children;
         var rgba_colors = [];
         var new_static_colors = {};
 
@@ -309,6 +294,41 @@
                 rgba_colors.push({
                   id: key,
                   value: 'A'
+                });
+                break;
+
+              case '{{ readableExtraColor }}':
+                rgba_colors.push({
+                  id: key,
+                  value: 'T'
+                });
+                break;
+
+              case '{{ lightColor }}':
+                rgba_colors.push({
+                  id: key,
+                  value: 'B'
+                });
+                break;
+
+              case '{{ darkColor }}':
+                rgba_colors.push({
+                  id: key,
+                  value: 'N'
+                });
+                break;
+
+              case '{{ mainGradientColor }}':
+                rgba_colors.push({
+                  id: key,
+                  value: 'gP'
+                });
+                break;
+
+              case '{{ secondaryGradientColor }}':
+                rgba_colors.push({
+                  id: key,
+                  value: 'gS'
                 });
                 break;
             } else {
@@ -348,6 +368,41 @@
                   value: '_A'
                 });
                 break;
+
+              case '{{ readableExtraColor }}':
+                rgba_colors.push({
+                  id: _key,
+                  value: '_T'
+                });
+                break;
+
+              case '{{ lightColor }}':
+                rgba_colors.push({
+                  id: _key,
+                  value: '_B'
+                });
+                break;
+
+              case '{{ darkColor }}':
+                rgba_colors.push({
+                  id: _key,
+                  value: '_N'
+                });
+                break;
+
+              case '{{ mainGradientColor }}':
+                rgba_colors.push({
+                  id: _key,
+                  value: '_gP'
+                });
+                break;
+
+              case '{{ secondaryGradientColor }}':
+                rgba_colors.push({
+                  id: _key,
+                  value: '_gS'
+                });
+                break;
             } else rgba_colors.push({
               id: _key,
               value: this.getRgbaValue(colors[offset_from], offset_hsl)
@@ -367,10 +422,10 @@
           }
         }
 
-        return React.createElement("div", {
+        return React__default.createElement("div", {
           className: classes && classes.root ? classes.root : ''
         }, rgba_colors.map(function (rgba, index) {
-          return React.createElement(DnmColorChartItem, {
+          return React__default.createElement(DnmColorChartItem, {
             key: index,
             className: classes && classes.item ? classes.item : '',
             rgba: rgba.value,
@@ -383,7 +438,7 @@
     }]);
 
     return DnmColorChart;
-  }(React.Component);
+  }(React__default.Component);
 
   DnmColorChart.propTypes = {
     classes: PropTypes.shape({

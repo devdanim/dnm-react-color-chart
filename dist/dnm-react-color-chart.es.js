@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 function _classCallCheck(instance, Constructor) {
@@ -92,35 +92,20 @@ function _possibleConstructorReturn(self, call) {
   return _assertThisInitialized(self);
 }
 
-var DnmColorChartItem = /*#__PURE__*/function (_React$PureComponent) {
-  _inherits(DnmColorChartItem, _React$PureComponent);
-
-  function DnmColorChartItem() {
-    _classCallCheck(this, DnmColorChartItem);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(DnmColorChartItem).apply(this, arguments));
-  }
-
-  _createClass(DnmColorChartItem, [{
-    key: "render",
-    value: function render() {
-      var _this$props = this.props,
-          rgba = _this$props.rgba,
-          className = _this$props.className,
-          onClick = _this$props.onClick;
-      var value = typeof rgba === 'string' ? rgba : null;
-      return React.createElement("div", {
-        className: className || '',
-        style: {
-          backgroundColor: value ? 'unset' : "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")")
-        },
-        onClick: onClick
-      }, value);
-    }
-  }]);
-
-  return DnmColorChartItem;
-}(React.PureComponent);
+var DnmColorChartItem = memo(function DnmColorChartItem(_ref) {
+  var rgba = _ref.rgba,
+      className = _ref.className,
+      onClick = _ref.onClick;
+  var value = typeof rgba === 'string' ? rgba : null;
+  return React.createElement("div", {
+    className: className || '',
+    style: {
+      backgroundColor: value ? 'unset' : "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")"),
+      position: 'relative'
+    },
+    onClick: onClick
+  }, value);
+});
 
 var DnmColorChart = /*#__PURE__*/function (_React$Component) {
   _inherits(DnmColorChart, _React$Component);
@@ -271,11 +256,11 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var _this$props2 = this.props,
-          classes = _this$props2.classes,
-          layout = _this$props2.layout,
-          colors = _this$props2.colors,
-          children = _this$props2.children;
+      var _this$props = this.props,
+          classes = _this$props.classes,
+          layout = _this$props.layout,
+          colors = _this$props.colors,
+          children = _this$props.children;
       var rgba_colors = [];
       var new_static_colors = {};
 
@@ -303,6 +288,41 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
               rgba_colors.push({
                 id: key,
                 value: 'A'
+              });
+              break;
+
+            case '{{ readableExtraColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'T'
+              });
+              break;
+
+            case '{{ lightColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'B'
+              });
+              break;
+
+            case '{{ darkColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'N'
+              });
+              break;
+
+            case '{{ mainGradientColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'gP'
+              });
+              break;
+
+            case '{{ secondaryGradientColor }}':
+              rgba_colors.push({
+                id: key,
+                value: 'gS'
               });
               break;
           } else {
@@ -340,6 +360,41 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
               rgba_colors.push({
                 id: _key,
                 value: '_A'
+              });
+              break;
+
+            case '{{ readableExtraColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_T'
+              });
+              break;
+
+            case '{{ lightColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_B'
+              });
+              break;
+
+            case '{{ darkColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_N'
+              });
+              break;
+
+            case '{{ mainGradientColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_gP'
+              });
+              break;
+
+            case '{{ secondaryGradientColor }}':
+              rgba_colors.push({
+                id: _key,
+                value: '_gS'
               });
               break;
           } else rgba_colors.push({

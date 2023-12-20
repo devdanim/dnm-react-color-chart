@@ -1,20 +1,17 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 
-class DnmColorChartItem extends React.PureComponent {
-  render() {
-    const { rgba, className, onClick } = this.props;
+const DnmColorChartItem = memo(function DnmColorChartItem({ rgba, className, onClick }) {
 
-    const value = typeof rgba === 'string' ? rgba : null;
+  const value = typeof rgba === 'string' ? rgba : null;
 
-    return (
-      <div className={className || ''} style={{ backgroundColor: value ? 'unset' : `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})` }} onClick={onClick}>
-        {value}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={className || ''} style={{ backgroundColor: value ? 'unset' : `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})`, position: 'relative' }} onClick={onClick}>
+      {value}
+    </div>
+  )
+});
 
 class DnmColorChart extends React.Component {
   constructor(props) {
@@ -132,7 +129,7 @@ class DnmColorChart extends React.Component {
 
   render() {
     const {
-      classes, layout, colors, children,
+      classes, layout, colors, children
     } = this.props;
     const rgba_colors = [];
     const new_static_colors = {};
@@ -142,6 +139,7 @@ class DnmColorChart extends React.Component {
         // if colors[key] match the pattern {{ color_name }}, should return the color value of color_name
         if (colors[key].match(/{{\s*[\w\.]+\s*}}/))
           switch (colors[key]) {
+
             case '{{ mainColor }}':
               rgba_colors.push({ id: key, value: 'P' });
               break;
@@ -150,6 +148,21 @@ class DnmColorChart extends React.Component {
               break;
             case '{{ extraColor }}':
               rgba_colors.push({ id: key, value: 'A' });
+              break;
+            case '{{ readableExtraColor }}':
+              rgba_colors.push({ id: key, value: 'T' });
+              break;
+            case '{{ lightColor }}':
+              rgba_colors.push({ id: key, value: 'B' });
+              break;
+            case '{{ darkColor }}':
+              rgba_colors.push({ id: key, value: 'N' });
+              break;
+            case '{{ mainGradientColor }}':
+              rgba_colors.push({ id: key, value: 'gP' });
+              break;
+            case '{{ secondaryGradientColor }}':
+              rgba_colors.push({ id: key, value: 'gS' });
               break;
           }
         else {
@@ -172,6 +185,21 @@ class DnmColorChart extends React.Component {
               break;
             case '{{ extraColor }}':
               rgba_colors.push({ id: key, value: '_A' });
+              break;
+            case '{{ readableExtraColor }}':
+              rgba_colors.push({ id: key, value: '_T' });
+              break;
+            case '{{ lightColor }}':
+              rgba_colors.push({ id: key, value: '_B' });
+              break;
+            case '{{ darkColor }}':
+              rgba_colors.push({ id: key, value: '_N' });
+              break;
+            case '{{ mainGradientColor }}':
+              rgba_colors.push({ id: key, value: '_gP' });
+              break;
+            case '{{ secondaryGradientColor }}':
+              rgba_colors.push({ id: key, value: '_gS' });
               break;
           }
         else
@@ -213,7 +241,7 @@ DnmColorChart.propTypes = {
     static: PropTypes.string
   })).isRequired,
   colors: PropTypes.objectOf(PropTypes.string).isRequired,
-  onColorClick: PropTypes.func,
+  onColorClick: PropTypes.func
 };
 
 export default DnmColorChart;

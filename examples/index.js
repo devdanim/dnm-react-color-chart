@@ -2,67 +2,67 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import DnmColorChart from '../dist/dnm-react-color-chart.es';
 
-const layout = {
-    "main-darker": {
-        "name": "Main Darker",
-        "offset_from": "main",
-        "offset_hsl": {
-            "h": 0,
-            "s": -10,
-            "l": -20
+const App = () => {
+    const layout = {
+        "main-color": {
+            "name": "Main Color",
+            "offset_from": "background-color",
+            "offset_hsl": {
+                "h": 0,
+                "s": -5,
+                "l": -10
+            }
+        },
+        "background-color": {
+            "name": "Secondary Color"
+        },
+        "text-color": {
+            "name": "Text Color",
+            "static": "#FFFFFF"
         }
-    },
-    "main": {
-        "name": "Main Color"
-    },
-    "secondary-color": {
-        "name": "Secondary Color"
-    },
-    "extra-color": {
-        "name": "Extra Color",
-    }
-};
+    };
 
-const variants = [
-    {
-        "main": "#49dc5b",
-        "secondary-color": "#3d78ab",
-        "extra-color": "#d01a1a"
-    },
-    {
-        "main": "#4d49dc",
-        "secondary-color": "#d01a1a",
-        "extra-color": "#3d78ab"
-    },
-    {
-        "main": "{{ mainColor }}",
-        "secondary-color": "{{ secondaryColor }}",
-        "extra-color": "{{ extraColor }}"
-    }
-]
+    const variants = [
+        {
+            "main-color": "#49dc5b",
+            "background-color": "#3d78ab"
+        },
+        {
+            "main": "#4d49dc",
+            "background-color": "#d01a1a"
+        },
+        {
+            "main": "{{ mainColor }}",
+            "background-color": "{{ lightColor }}"
+        }
+    ]
 
-const handleColorClick = (event, { id, value }) => {
-    console.log(event, { id, value });
+
+    const handleColorClick = (event, { id, value }) => {
+        console.log('handleColorClick', event, { id, value });
+    }
+
+    return (
+        <React.Fragment>
+            {
+                variants.map((colors, i) => (
+                    <DnmColorChart
+                        key={i}
+                        classes={{
+                            item: "color-chart-item",
+                            root: "color-chart-root"
+                        }}
+                        layout={layout}
+                        colors={colors}
+                        onColorClick={handleColorClick}
+                    >
+                        <span>Theme {i + 1}</span>
+                    </DnmColorChart>
+                ))
+            }
+        </React.Fragment>
+    );
 }
 
 const root = createRoot(document.getElementById('root'));
-root.render(
-    <React.Fragment>
-        {
-            variants.map((colors, i) => (
-                <DnmColorChart
-                    key={i}
-                    classes={{
-                        item: "color-chart-item",
-                        root: "color-chart-root"
-                    }}
-                    layout={layout}
-                    colors={colors}
-                    onColorClick={handleColorClick}
-                >
-                    <span>Theme {i + 1}</span>
-                </DnmColorChart>
-            ))
-        }
-    </React.Fragment>  
-);
+root.render(<App />);
