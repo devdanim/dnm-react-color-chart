@@ -94,6 +94,7 @@ function _possibleConstructorReturn(self, call) {
 
 var DnmColorChartItem = memo(function DnmColorChartItem(_ref) {
   var rgba = _ref.rgba,
+      privateColor = _ref.privateColor,
       className = _ref.className,
       onClick = _ref.onClick;
   var value = typeof rgba === 'string' ? rgba : null;
@@ -101,10 +102,11 @@ var DnmColorChartItem = memo(function DnmColorChartItem(_ref) {
     className: className || '',
     style: {
       backgroundColor: value ? 'unset' : "rgba(".concat(rgba[0], ", ").concat(rgba[1], ", ").concat(rgba[2], ", ").concat(rgba[3], ")"),
-      position: 'relative'
+      position: 'relative',
+      opacity: privateColor ? '0.3' : 1
     },
     onClick: onClick
-  }, value);
+  }, privateColor && '/', value);
 });
 
 var DnmColorChart = /*#__PURE__*/function (_React$Component) {
@@ -332,10 +334,20 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
               value: rgba
             });else new_static_colors[key] = rgba;
           }
+        } else if (color_in_layout === null) {
+          var _rgba = this.getRgbaValue(colors[key]);
+
+          rgba_colors.push({
+            id: key,
+            value: _rgba,
+            "private": true
+          });
         }
       }
 
       for (var _key in layout) {
+        var layout_item = layout[_key];
+        if (!layout_item) continue;
         var _layout$_key = layout[_key],
             offset_hsl = _layout$_key.offset_hsl,
             offset_from = _layout$_key.offset_from;
@@ -405,6 +417,9 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
       }
 
       for (var _key2 in layout) {
+        var _layout_item = layout[_key2];
+        if (!_layout_item) continue;
+
         if (layout[_key2]["static"]) {
           if (!new_static_colors[_key2]) rgba_colors.push({
             id: _key2,
@@ -419,10 +434,13 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
       return React.createElement("div", {
         className: classes && classes.root ? classes.root : ''
       }, rgba_colors.map(function (rgba, index) {
+        var _rgba$private;
+
         return React.createElement(DnmColorChartItem, {
           key: index,
           className: classes && classes.item ? classes.item : '',
           rgba: rgba.value,
+          privateColor: (_rgba$private = rgba === null || rgba === void 0 ? void 0 : rgba["private"]) !== null && _rgba$private !== void 0 ? _rgba$private : false,
           onClick: function onClick(event) {
             return _this2.handleColorClick(event, rgba);
           }

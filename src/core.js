@@ -2,12 +2,13 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 
-const DnmColorChartItem = memo(function DnmColorChartItem({ rgba, className, onClick }) {
+const DnmColorChartItem = memo(function DnmColorChartItem({ rgba, privateColor, className, onClick }) {
 
   const value = typeof rgba === 'string' ? rgba : null;
 
   return (
-    <div className={className || ''} style={{ backgroundColor: value ? 'unset' : `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})`, position: 'relative' }} onClick={onClick}>
+    <div className={className || ''} style={{ backgroundColor: value ? 'unset' : `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})`, position: 'relative', opacity: privateColor ? '0.3' : 1 }} onClick={onClick}>
+      {privateColor && '/'}
       {value}
     </div>
   )
@@ -170,9 +171,14 @@ class DnmColorChart extends React.Component {
           if (!color_in_layout.static) rgba_colors.push({ id: key, value: rgba });
           else new_static_colors[key] = rgba;
         }
+      } else if (color_in_layout === null) {
+        const rgba = this.getRgbaValue(colors[key]);
+        rgba_colors.push({ id: key, value: rgba, private: true });
       }
     }
     for (const key in layout) {
+      const layout_item = layout[key];
+      if (!layout_item) continue;
       const { offset_hsl, offset_from } = layout[key];
       if (offset_hsl && offset_from && colors[offset_from]) {
         if (colors[offset_from].match(/{{\s*[\w\.]+\s*}}/))
@@ -207,6 +213,8 @@ class DnmColorChart extends React.Component {
       }
     }
     for (const key in layout) {
+      const layout_item = layout[key];
+      if (!layout_item) continue;
       if (layout[key].static) {
         if (!new_static_colors[key]) rgba_colors.push({ id: key, value: this.getRgbaValue(layout[key].static) });
         else rgba_colors.push({ id: key, value: new_static_colors[key] });
@@ -216,7 +224,7 @@ class DnmColorChart extends React.Component {
       <div className={classes && classes.root ? classes.root : ''}>
         {
           rgba_colors.map((rgba, index) => (
-            <DnmColorChartItem key={index} className={classes && classes.item ? classes.item : ''} rgba={rgba.value} onClick={event => this.handleColorClick(event, rgba)} />
+            <DnmColorChartItem key={index} className={classes && classes.item ? classes.item : ''} rgba={rgba.value} privateColor={rgba?.private ?? false} onClick={event => this.handleColorClick(event, rgba)} />
           ))
         }
         {children}

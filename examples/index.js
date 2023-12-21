@@ -19,13 +19,15 @@ const App = () => {
         "text-color": {
             "name": "Text Color",
             "static": "#FFFFFF"
-        }
+        },
+        "undefined-color": null
     };
 
     const variants = [
         {
             "main-color": "#49dc5b",
-            "background-color": "#3d78ab"
+            "background-color": "#3d78ab",
+            "undefined-color": "#9bce4a"
         },
         {
             "main": "#4d49dc",
