@@ -135,11 +135,12 @@ class DnmColorChart extends React.Component {
     const rgba_colors = [];
     const new_static_colors = {};
     for (const key in colors) {
+      const color = colors[key];
       const color_in_layout = layout[key];
-      if (color_in_layout) {
-        // if colors[key] match the pattern {{ color_name }}, should return the color value of color_name
-        if (colors[key].match(/{{\s*[\w\.]+\s*}}/))
-          switch (colors[key]) {
+      if (color && color_in_layout) {
+        // if color match the pattern {{ color_name }}, should return the color value of color_name
+        if (color.match(/{{\s*[\w\.]+\s*}}/))
+          switch (color) {
 
             case '{{ mainColor }}':
               rgba_colors.push({ id: key, value: 'P' });
@@ -167,12 +168,12 @@ class DnmColorChart extends React.Component {
               break;
           }
         else {
-          const rgba = this.getRgbaValue(colors[key]);
+          const rgba = this.getRgbaValue(color);
           if (!color_in_layout.static) rgba_colors.push({ id: key, value: rgba });
           else new_static_colors[key] = rgba;
         }
       } else if (color_in_layout === null) {
-        const rgba = this.getRgbaValue(colors[key]);
+        const rgba = this.getRgbaValue(color);
         rgba_colors.push({ id: key, value: rgba, private: true });
       }
     }

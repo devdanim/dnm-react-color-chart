@@ -267,11 +267,12 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
       var new_static_colors = {};
 
       for (var key in colors) {
+        var color = colors[key];
         var color_in_layout = layout[key];
 
-        if (color_in_layout) {
-          // if colors[key] match the pattern {{ color_name }}, should return the color value of color_name
-          if (colors[key].match(/{{\s*[\w\.]+\s*}}/)) switch (colors[key]) {
+        if (color && color_in_layout) {
+          // if color match the pattern {{ color_name }}, should return the color value of color_name
+          if (color.match(/{{\s*[\w\.]+\s*}}/)) switch (color) {
             case '{{ mainColor }}':
               rgba_colors.push({
                 id: key,
@@ -328,14 +329,14 @@ var DnmColorChart = /*#__PURE__*/function (_React$Component) {
               });
               break;
           } else {
-            var rgba = this.getRgbaValue(colors[key]);
+            var rgba = this.getRgbaValue(color);
             if (!color_in_layout["static"]) rgba_colors.push({
               id: key,
               value: rgba
             });else new_static_colors[key] = rgba;
           }
         } else if (color_in_layout === null) {
-          var _rgba = this.getRgbaValue(colors[key]);
+          var _rgba = this.getRgbaValue(color);
 
           rgba_colors.push({
             id: key,
